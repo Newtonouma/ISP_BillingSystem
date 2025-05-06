@@ -1,31 +1,29 @@
-import nodemailer from 'nodemailer';  // Import nodemailer for sending emails
-// Create transporter using Gmail's SMTP service
+// utils/mailer.js
+import nodemailer from 'nodemailer';
+
+// Create a reusable transporter object using SMTP transport
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'gmail',  // Or your mail service provider
     auth: {
-        user: process.env.EMAIL,  // Use environment variables for email
-        pass: process.env.EMAIL_PASS  // Use environment variables for password
-    }
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password',
+    },
 });
 
-// Function to send invoice with attachment
-const sendInvoiceWithAttachment = async (to, subject, text, attachmentBuffer, filename) => {
+// Send email with invoice attachment
+export const sendInvoiceWithAttachment = (to, subject, text, attachmentBuffer, filename) => {
     const mailOptions = {
-        from: process.env.EMAIL,  // Sender address
-        to,                       // Recipient address
-        subject,                  // Subject line
-        text,                     // Plain text body
+        from: 'your-email@gmail.com',
+        to,
+        subject,
+        text,
         attachments: [
             {
-                filename: filename,  // Filename for the attachment
-                content: attachmentBuffer  // The actual content of the attachment (buffer)
-            }
-        ]
+                filename,
+                content: attachmentBuffer,
+            },
+        ],
     };
 
-    // Send the email and wait for the result
-    await transporter.sendMail(mailOptions);
+    return transporter.sendMail(mailOptions);
 };
-
-// Export the function for use in other files
-module.exports = { sendInvoiceWithAttachment };
