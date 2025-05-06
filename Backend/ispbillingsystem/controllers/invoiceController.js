@@ -1,10 +1,11 @@
-const Invoice = require('../models/Invoice');
-const Customer = require('../models/Customer');
-const PDFDocument = require('pdfkit');
-const mailer = require('../utils/mailer');
-const streamBuffers = require('stream-buffers'); // for capturing PDF in memory
+// controllers/invoiceController.js
+import Invoice from '../models/Invoice.js';
+import Customer from '../models/Customer.js';
+import PDFDocument from 'pdfkit';
+import mailer from '../utils/mailer.js';
+import streamBuffers from 'stream-buffers'; // for capturing PDF in memory
 
-exports.createInvoice = async (req, res) => {
+export const createInvoice = async (req, res) => {
     try {
         const customer = await Customer.findById(req.body.customerId);
         if (!customer) return res.status(404).json({ error: 'Customer not found' });
